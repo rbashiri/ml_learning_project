@@ -1,0 +1,147 @@
+## Defination of Machine Learning
+Machine Learning forms a subset of artificial intelligence, 
+representing a fundamentally different approach to creating intelligent systems. 
+Rather than programming explicit rules and logic, 
+machine learning systems learn patterns and make decisions based on data.
+
+##  Deep Learning
+Deep Learning represents a subset of machine 
+learning inspired by the structure and function of the human brain.
+Deep learning systems use `artificial neural` networks to process information 
+and learn patterns.
+
+## Generative AI
+Generative AI represents a specialized subset of 
+deep learning focused on creating new content rather than just analyzing or 
+classifying existing data. like generate text, images, audio, video, and other forms of media
+
+## Data journey : four key stages
+1- Raw data collection 
+2- Data Organization
+3- Data Analysis
+5- Avanced Predictions
+note: While data analysts look backward to understand what happened,
+data scientists look forward to predict what will happen next and recommend
+ actions to take. 
+
+ ## Supervised learning:
+ use labeled data to train models this means each
+ pieces of training data comes with thhe correct answer already provided.
+
+  two type : categorial and regression
+  Regression used to predict number 
+  # Univariate Regression
+  y = mx +c
+  y = output value which we want to predict
+  x = input value use to make prediction 
+  m = is the slope 
+  c = is the y-intercept 
+
+  # Multivariate Regression : more variable or inputs
+  y=m_1 x_1+m_2 x_2+c (2D = 2 variables)
+	y = predicted test score
+	x₁ = hours studied per week
+	x₂ = hours of sleep per night
+	m₁ = coefficient for study hours (how much test scores change per extra study hour)
+ 
+The mathematical principles remain the same, but the equations become:
+y=m_1x_1+m_2.x_2+ m_3x_3+m_4 x_4+...+c
+y = 4x₁ + 3x₂ + 10, what does the coefficient "3" tell us about the relationship between sleep and test scores?
+Each extra hour of sleep increases test score by 3 points on average, while holding study hours constant
+The coefficients show that for each additional hour of sleep per night, the predicted test score increases by 3 points on average, assuming study hours remain the same.
+C= if x1 and x2 both are equal 0 the starting score is 10 
+
+==================================================================
+Target : The target is the outcome you want to predict.Target also called "dependent variable" or "response variable"
+
+syntax = target = df['target_col']
+Feature Variables (What We Use to Make Predictions) : independent variables
+features = df.(['target_col'],axis = 1)
+axis=0 = rows (horizontal removal) - axis=1 = columns (vertical removal)
+==================================================================
+
+How to Test Our Model
+Split your dataset into training and test sets. Use 80% of the data for training 
+and 20% for testing.
+
+The train_test_split Function
+Scikit-learn provides a function called train_test_split that does exactly what we need. Let's see how it works.
+Basic Usage:
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = 
+                          train_test_split(features, target, test_size=0.2, random_state=42)
+
+=======================================================================
+How do we measure model is good or not ?
+1- Mean Squared Error  (MSE)= (predicted -actual)^2/ total measure
+
+- No Cancellation: Squaring prevents positive and negative errors from canceling out.
+- Penalty for Large Errors: Squaring heavily penalizes large mistakes. A $20,000 error is four times worse than a $10,000 error (20² vs 10²).
+- Single Summary Number: Reduces all prediction errors to one interpretable metric.
+- Mathematical Properties: MSE has useful mathematical properties that help algorithms find optimal solutions.
+
+Mean Absolute Error (MAE): Uses absolute values instead of squaring
+Less sensitive to very large errors
+Easier to interpret (in original units)
+Sometimes more appropriate for business contexts
+Root Mean Squared Error (RMSE): Square root of MSE
+
+Returns error to original units (dollars instead of squared dollars)
+Easier to interpret but mathematically equivalent to MSE for comparison
+
+====================================================================================
+Linear Regression with Scikit-Learn
+Step 1: Import and Create the Model
+
+    from sklearn.linear_model import LinearRegression
+    model = LinearRegression()
+
+Step 2: Train the Model (fit)
+    model.fit(features_train(X_train), target_train(or y_train))
+
+Step 3: Make Predictions (predict)
+    predictions = model.predict(features_test)
+
+Step 4: Evaluate Performance
+        from sklearn.metrics import mean_squared_error
+        mse = mean_squared_error(target_test, predictions)
+       rmse = np.sqrt(mse)
+======================================================================================
+What Makes a Good Model?
+After training, you'll have a model that can predict house prices.
+ But how do you know if it's any good?
+
+1- Low Mean Squared Error
+    Your model's predictions should be close to actual prices
+    Lower MSE means better performance
+    You can compare different models objectively
+2- Reasonable Coefficients
+    Positive coefficients for desirable features (larger area = higher price)
+    Negative coefficients for undesirable features (farther from the city center = lower price)
+    Coefficient magnitudes that make business sense
+
+3- Good Test Performance
+    The model should perform well on apartments it has never seen
+    Similar performance on training and test sets indicates good generalization
+    Large performance gaps suggest overfitting.
+
+=====================================================================
+Data interpretion
+
+Unlike MSE, RMSE is immediately interpretable and actionable for business decisions
+Before we dive into confidence intervals, it's crucial to understand the statistical principle behind these numbers.
+
+The Empirical Rule (68-95-99.7 Rule)
+The percentages we use come from a fundamental statistical concept called the empirical rule, which describes how data is distributed in a normal distribution (the classic bell curve):
+
+68% of data falls within 1 standard deviation of the mean
+95% of data falls within 2 standard deviations of the mean
+99.7% of data falls within 3 standard deviations of the mean
+
+Example:
+
+Therefore, with your RMSE of $8,506.09:
+68% confidence: ±1 × $8,506 = ±$8,506
+95% confidence: ±2 × $8,506 = ±$17,012
