@@ -145,3 +145,231 @@ Example:
 Therefore, with your RMSE of $8,506.09:
 68% confidence: ±1 × $8,506 = ±$8,506
 95% confidence: ±2 × $8,506 = ±$17,012
+
+======================================================================================
+Decision Trees for Regression
+A decision tree regression model creates a flowchart of yes/no questions that leads to price predictions. Instead of learning coefficients for an equation, it learns:
+
+Which questions to ask
+In what order to ask them
+What price to predict for each final category
+==========================================================================================
+Understanding the Control Settings (Hyperparameters)
+
+1. Maximum Depth - How Many Questions Can You Ask?
+What it means: The longest chain of questions allowed
+
+Max depth = 1: You can only ask ONE question total (super simple tree)
+Max depth = 3: You can ask up to 3 questions in a row (more detailed)
+Max depth = 10: You can ask up to 10 questions in a row (very detailed)
+2. Minimum Samples to Split - When Is a Group Too Small?
+What it means: "Don't bother splitting a group unless it has at least X examples"
+3. Minimum Samples per Leaf - How Many Examples for a Prediction?
+What it means: "Every final prediction must be based on at least X examples"
+4. Minimum Improvement Required - Is This Split Worth It?
+What it means: "Only split if it improves things by at least X amount"
+
+============================================================================
+ asking yes/no questions to split data into pure groups for predictions. 
+ Whether you're using linear regression, decision trees, or any other algorithm, the workflow is identical:
+
+Import the model
+Create the model
+Train with .fit()
+Predict with .predict()
+Evaluate performance
+
+==============================================================================
+Random Forest Regressor
+Bootstrap Sampling (Creating Diverse Training Sets):For each tree in the forest, 
+Random Forest creates a bootstrap sample - a random subset of your training data with replacement.
+
+Hyperparameters That Matter
+Random Forest introduces new hyperparameters that control the forest behavior:
+
+n_estimators: Number of trees in the forest (typical range: 50-500)
+max_features: Number of features considered at each split (typically √total_features)
+max_depth: Maximum depth of individual trees (controls individual tree complexity)
+min_samples_split: Minimum samples needed to split a node
+
+The workflow remains exactly the same:
+
+Import the model
+Create the model with RandomForestRegressor()
+Train with .fit()
+Predict with .predict()
+Evaluate performance
+
+### Key Random Forest Parameters
+1- n_estimators (Number of Trees)
+Default: 100 trees
+More trees: Generally better performance but slower training
+Sweet spot: Usually 100-500 trees for most problems
+2- max_features (Features per Split)
+Default: Uses all features for regression
+Best practice: Often √(total_features) works well
+Your data: With 13 features, might try 3-4 features per split
+3- random_state
+Purpose: Ensures reproducible results
+Important: Allows you to compare models fairly
+============================================================================================
+## This is Binary Classification
+Unlike house prices (which could be any number), a diabetes diagnosis has only two possible outcomes:
+Class 1: Has diabetes
+Class 0: Does not have diabetes
+This is called binary classification - predicting one of two possible categories.
+The four outcomes have specific names:
+
+True Negative (TN): Actually healthy AND model says healthy
+False Positive (FP): Actually healthy BUT model says sick (false alarm)
+False Negative (FN): Actually sick BUT model says healthy (missed case)
+True Positive (TP): Actually sick AND model says sick (correct detection)
+
+=================================================================================
+Classification Performance Metrics
+
+Precision answers: "When my model says someone is sick, how often is that actually true?"
+Simple Formula
+Precision = True Positives ÷ (True Positives + False Positives)
+
+Why Precision Matters
+High precision is good because:
+Fewer false alarms
+Less unnecessary worry for patients
+Saves money on unnecessary tests
+
+Low precision means:
+Lots of false alarms
+People get scared unnecessarily
+Doctors waste time on healthy patients
+
+Recall answers: "Of all the people who are actually sick, how many does my model find?"
+Recall = True Positives ÷ (True Positives + False Negatives)
+Why Recall Matters
+High recall is good because:
+
+You don't miss many sick people
+Better health outcomes
+Fewer people go untreated
+Low recall means:
+
+You miss lots of sick people
+They don't get help they need
+Can be dangerous
+
+F1 Score: The Best of Both Worlds
+What F1 Score Does
+F1 Score combines *precision and recall* into one number. 
+It's only high when both precision AND recall are good.
+
+Simple Formula
+F1 = 2 * (precision * Recall) /(Precision + Recall)
+
+Understanding F1 Scores
+90%+: Excellent model
+80-90%: Good model
+70-80%: Okay model
+Below 70%: Needs work
+=============================================================================
+LogisticRegression() Method
+The LogisticRegression() class from scikit-learn implements logistic regression for classification:
+
+from sklearn.linear_model import LogisticRegression
+
+# Create a logistic regression model
+model = LogisticRegression(random_state=42)
+Key Parameters:
+
+random_state=42: Ensures reproducible results by setting the random seed
+max_iter=100: Maximum iterations for convergence (default is usually sufficient)
+Essential Methods:
+
+.fit(X_train, y_train): Train the model on training data
+.predict(X_test): Make class predictions (returns 0 or 1)
+.predict_proba(X_test): Get probability estimates for each class
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+
+# Calculate metrics (assuming you have target_test and predictions)
+accuracy = accuracy_score(y_test, predictions)
+precision = precision_score(y_test, predictions)
+recall = recall_score(y_test, predictions)
+f1 = f1_score(y_test, predictions)
+confusion_mat = confusion_matrix(y_test, predictions)
+Method Syntax:
+
+All metrics take two arguments: (y_true, y_pred)
+y_true: The actual target values (what really happened)
+y_pred: Your model's predictions (what the model guessed)
+Return Values:
+
+All methods return decimal values (0.0 to 1.0)
+Multiply by 100 or use .1% formatting to show as percentages
+confusion_matrix() returns a 2D array showing prediction vs actual counts
+
++===========================================================================
+For a binary classification problem, the confusion matrix looks like this:
+
+Predicted Positive	Predicted Negative
+Actual Positive	True Positive (TP)	False Negative (FN)
+Actual Negative	False Positive (FP)	True Negative (TN)
+Explanation of the terms
+True Positive (TP): The model correctly predicts a positive class.
+Example: A patient has a disease, and the model predicts they have the disease.
+True Negative (TN): The model correctly predicts a negative class.
+Example: A healthy patient is correctly predicted as healthy.
+False Positive (FP): The model incorrectly predicts a positive class (also called a Type I error).
+Example: A healthy patient is incorrectly predicted to have the disease.
+False Negative (FN): The model incorrectly predicts a negative class (also called a Type II error).
+Example: A patient with the disease is incorrectly predicted as healthy.
+Example
+
+=============================================================================================
+## Decision Trees and Random Forest for Classification 
+The familiar workflow remains unchanged:
+from sklearn.tree import DecisionTreeClassifier
+
+# Same workflow as regression
+model = DecisionTreeClassifier(random_state=42)
+model.fit(features_train, target_train)
+predictions = model.predict(features_test)
+The evaluation shifts from MSE and RMSE to the classification metrics you learned: accuracy, precision, recall, and F1 score. The same confusion matrix analysis applies, helping you understand where your model succeeds and where it struggles.
+
+# DecisionTree Classifier
+from sklearn.tree import DecisionTreeClassifier
+# same workflow as regression
+model = DecisionTreeClassifier(random_state = 42)
+model.fit(X_train , y_train)
+predictions = model.predict(X_test)
+
+
+# The evaluation shifts from MSE and RMSE to the classification metrics you learned:
+#  accuracy, precision, recall, and F1 score.
+#  Hyperparameters for Classification Trees
+# Key hyperparameters to control overfitting
+dt_classifier = DecisionTreeClassifier(max_depth= 5 , # Limit tree depth 
+                                       min_samples_split= 20, # Minimum samples to split a node
+                                       min_samples_leaf= 10 , # Minimum samples in each leaf
+                                       max_features='sqrt', # Features to consider per split
+                                       random_state = 42)
+# max_depth: Prevents trees from growing too deep and memorizing noise
+# min_samples_split/leaf: Ensures statistical significance in decisions
+# max_features: Adds randomness to reduce overfitting
+
+
+## RandomForestClassifier 
+# Random forests add ensemble-specific parameters on top of the tree parameters:
+from sklearn.ensemble import RandomForestClassifier
+# Randomforest hyperparameters
+rf_classifier = RandomForestClassifier(n_estiamtors = 100, # number of trees ( more better, but slower )
+                                       max_depth = 10, # Indivitual tree depth
+                                       min_samples_split = 5, # Tree split criteria
+                                       man_features= 'sqrt', # features per tree(default for classification)
+                                       bootstrap= True, # sampler with replacement
+                                       random_state = 42)
+
+# n_estimators: More trees generally improve performance until plateau
+# bootstrap: Controls whether trees see different data samples
+# max_features: 'sqrt' is typically optimal for classification tasks
+
+# Feature Importances
+One of the most valuable aspects of tree-based models is their ability to tell you which features drive predictions
